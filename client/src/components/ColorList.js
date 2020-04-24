@@ -7,7 +7,7 @@ const initialColor = {
   code: { hex: "" },
 };
 
-const ColorList = ({ colors, updateColors }) => {
+const ColorList = ({ colors, updateColors }, props) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
@@ -35,7 +35,7 @@ const ColorList = ({ colors, updateColors }) => {
 
   const deleteColor = (e, color) => {
     // make a delete request to delete this color
-    e.stopPropagation();
+
     axiosWithAuth()
       .delete(`/api/colors/${colorToEdit.id}`, colorToEdit)
       .then((res) => {
@@ -55,6 +55,7 @@ const ColorList = ({ colors, updateColors }) => {
               <span
                 className="delete"
                 onClick={(e) => {
+                  e.stopPropagation();
                   deleteColor(e, color);
                 }}
               >
@@ -93,6 +94,7 @@ const ColorList = ({ colors, updateColors }) => {
               value={colorToEdit.code.hex}
             />
           </label>
+
           <div className="button-row">
             <button type="submit">save</button>
             <button onClick={() => setEditing(false)}>cancel</button>
