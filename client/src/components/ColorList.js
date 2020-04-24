@@ -33,8 +33,16 @@ const ColorList = ({ colors, updateColors }) => {
       .catch((err) => console.log("error on save color", err));
   };
 
-  const deleteColor = (color) => {
+  const deleteColor = (e, color) => {
     // make a delete request to delete this color
+    e.stopPropagation();
+    axiosWithAuth()
+      .delete(`/api/colors/${colorToEdit.id}`, colorToEdit)
+      .then((res) => {
+        updateColors(colors.filter(({ id }) => id !== color.id));
+        setEditing(false);
+      })
+      .catch((err) => console.log("error on delete", err));
   };
 
   return (
@@ -47,8 +55,7 @@ const ColorList = ({ colors, updateColors }) => {
               <span
                 className="delete"
                 onClick={(e) => {
-                  e.stopPropagation();
-                  deleteColor(color);
+                  deleteColor(e, color);
                 }}
               >
                 x
